@@ -94,7 +94,7 @@ services:
        RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
        RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
     networks:
-          - default
+       - default
 
   mongodb:
     image: mongo:${MONGODB_VERSION}
@@ -169,7 +169,7 @@ services:
 
 
   jaeger:
-    image: jaegertracing/all-in-one:1.7
+    image: jaegertracing/all-in-one:${JAEGER_VERSION}
     environment:
       - COLLECTOR_ZIPKIN_HTTP_PORT=9411
       - ES_SERVER_URLS=http://elasticsearch:9200
@@ -177,9 +177,7 @@ services:
       - ES_TAGS_AS_FIELDS=true
     restart: always
     networks:
-      default:
-        aliases:
-          - jaeger
+      - default
     expose:
       - "5775"
       - "6831"
