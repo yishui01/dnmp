@@ -20,18 +20,22 @@ services:
       - "${ELASTICSEARCH_HOST_PORT_C}:9200"
       - "${ELASTICSEARCH_HOST_PORT_S}:9300"
 
+
   kibana:
     image: kibana:${KIBANA_VERSION}
     container_name: kibana
     environment:
       TZ: "$TZ"
       elasticsearch.hosts: http://elasticsearch:9200
+    volumes:
+      - ${KIBANA_CONF_FILE}:/usr/share/kibana/config/kibana.yml
     hostname: kibana
     depends_on:
       - elasticsearch
     restart: always
     ports:
       - "${KIBANA_HOST}:5601"
+
 
   logstash:
     image: logstash:${LOGSTASH_VERSION}
@@ -40,11 +44,16 @@ services:
     restart: always
     depends_on:
       - elasticsearch
+    volumes:
+      - ${LOGSTASH_CONF_FILE}:/usr/share/logstash/config/logstash.yml
+      - ${LOGSTASH_PIPELINE_DIR}:/usr/share/logstash/pipeline
     environment:
       TZ: "$TZ"
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     ports:
       - "${LOGSTASH_HOST_PORT_C}:9600"
       - "${LOGSTASH_HOST_PORT_S}:5044"
+
 
 networks:
   default:

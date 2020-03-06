@@ -22,7 +22,6 @@ services:
     restart: always
     networks:
       - default
-
   php:
     build:
       context: ./services/php
@@ -44,7 +43,6 @@ services:
       - SYS_PTRACE
     networks:
       - default
-
   mysql:
     image: mysql:${MYSQL_VERSION}
     container_name: mysql
@@ -73,6 +71,7 @@ services:
       TZ: "$TZ"
     networks:
       - default
+
 
   elasticsearch:
     build:
