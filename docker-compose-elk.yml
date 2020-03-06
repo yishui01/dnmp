@@ -54,6 +54,5 @@ services:
       - "${LOGSTASH_HOST_PORT_C}:9600"
       - "${LOGSTASH_HOST_PORT_S}:5044"
 
-
 networks:
   default:

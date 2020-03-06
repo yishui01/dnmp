@@ -72,7 +72,6 @@ services:
     networks:
       - default
 
-
   elasticsearch:
     build:
       context: ./services/elasticsearch
@@ -92,6 +91,7 @@ services:
     ports:
       - "${ELASTICSEARCH_HOST_PORT_C}:9200"
       - "${ELASTICSEARCH_HOST_PORT_S}:9300"
+
 
 networks:
   default:

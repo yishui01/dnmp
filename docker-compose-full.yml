@@ -201,12 +201,12 @@ services:
 
 
   etcd0:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_0}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD0_HTTP_PORT}:2379"
+      - "${ETCD0_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name
@@ -226,12 +226,12 @@ services:
 
 
   etcd1:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_1}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD1_HTTP_PORT}:2379"
+      - "${ETCD1_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name
@@ -250,12 +250,12 @@ services:
       - etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380
 
   etcd2:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_2}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD2_HTTP_PORT}:2379"
+      - "${ETCD2_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name

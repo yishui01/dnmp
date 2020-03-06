@@ -1,20 +1,5 @@
 version: "3"
 services:
-  mysql:
-    image: mysql:${MYSQL_VERSION}
-    container_name: mysql
-    ports:
-      - "${MYSQL_HOST_PORT}:3306"
-    volumes:
-      - ${MYSQL_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
-      - ${MYSQL_DATA_DIR}:/var/lib/mysql/:rw
-    restart: always
-    networks:
-      - default
-    environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      TZ: "$TZ"
-
   redis:
     image: redis:${REDIS_VERSION}
     container_name: redis
@@ -28,6 +13,47 @@ services:
       TZ: "$TZ"
     networks:
       - default
+
+  memcached:
+    image: memcached:${MEMCACHED_VERSION}
+    container_name: memcached
+    ports:
+      - "${MEMCACHED_HOST_PORT}:11211"
+    environment:
+      MEMCACHED_CACHE_SIZE: "${MEMCACHED_CACHE_SIZE}"
+    networks:
+      - default
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION}
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "${RABBITMQ_HOST_PORT_C}:5672"
+      - "${RABBITMQ_HOST_PORT_S}:15672"
+    environment:
+      TZ: "$TZ"
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+    networks:
+      - default
+
+  mongodb:
+    image: mongo:${MONGODB_VERSION}
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_INITDB_ROOT_PASSWORD}"
+      TZ: "$TZ"
+    volumes:
+      - ${MONGODB_DATA_DIR}:/data/db:rw
+      - ${MONGODB_DATA_DIR}/mongo_key:/mongo:rw
+    ports:
+      - "${MONGODB_HOST_PORT}:27017"
+    networks:
+      - default
+    command:
+      --auth
 
   elasticsearch:
     build:
@@ -117,12 +143,12 @@ services:
 
 
   etcd0:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_0}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD0_HTTP_PORT}:2379"
+      - "${ETCD0_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name
@@ -142,12 +168,12 @@ services:
 
 
   etcd1:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_1}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD1_HTTP_PORT}:2379"
+      - "${ETCD1_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name
@@ -166,12 +192,12 @@ services:
       - etcd0=http://etcd0:2380,etcd1=http://etcd1:2380,etcd2=http://etcd2:2380
 
   etcd2:
-    image: etcd:${ETCD_VERSION}
+    image: daocloud.io/daocloud/etcd:${ETCD_VERSION}
     volumes:
       - ${ETCD_DATA_2}:/etcd_data
     ports:
-      - "${ETCD_HTTP_PORT}:2379"
-      - "${ETCD_GRPC_PORT}:2380"
+      - "${ETCD2_HTTP_PORT}:2379"
+      - "${ETCD2_GRPC_PORT}:2380"
     command:
       - /usr/local/bin/etcd
       - -name
